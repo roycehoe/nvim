@@ -13,13 +13,4 @@ vim.opt.rtp:prepend(lazypath)
 
 vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappings are correct
 
-require("lazy").setup(
-	{
-		"olimorris/onedarkpro.nvim",
-		priority = 1000, -- Ensure it loads first
-		config = function()
-			vim.cmd("colorscheme onedark")
-		end,
-	}
-
-)
+require("lazy").setup("plugins")
