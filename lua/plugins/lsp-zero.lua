@@ -105,24 +105,54 @@ return {
                     }
                 },
             })
-            require('lspconfig')['eslint'].setup({
-                on_attach = function(client, bufnr)
-                    -- LSP keymaps and autocmd to fix on save
-                    lsp_zero.default_keymaps({buffer = bufnr})
-                    vim.api.nvim_create_autocmd("BufWritePre", {
-                        buffer = bufnr,
-                        command = "EslintFixAll",
-                    })
-                end,
-                settings = {
-                    codeActionOnSave = {
-                        enable = true,
-                        mode = "all",
-                    },
-                    format = true,
-                    run = "onType",
-                },
+            -- require('lspconfig')['prettier'].setup({
+            --     on_attach = function(client, bufnr)
+            --         -- LSP keymaps and autocmd to fix on save
+            --         lsp_zero.default_keymaps({buffer = bufnr})
+            --         vim.api.nvim_create_autocmd("BufWritePre", {
+            --             buffer = bufnr,
+            --             -- command = "EslintFixAll",
+            --         })
+            --     end,
+            --     settings = {
+            --         codeActionOnSave = {
+            --             enable = true,
+            --             mode = "all",
+            --         },
+            --         format = true,
+            --         run = "onType",
+            --     },
+            -- })
+            -- require('lspconfig')['eslint'].setup({
+            --     on_attach = function(client, bufnr)
+            --         -- LSP keymaps and autocmd to fix on save
+            --         lsp_zero.default_keymaps({buffer = bufnr})
+            --         vim.api.nvim_create_autocmd("BufWritePre", {
+            --             buffer = bufnr,
+            --             command = "EslintFixAll",
+            --         })
+            --     end,
+            --     settings = {
+            --         codeActionOnSave = {
+            --             enable = true,
+            --             mode = "all",
+            --         },
+            --         format = true,
+            --         run = "onType",
+            --     },
+            -- })
+
+            require('lspconfig')['vtsls'].setup({
+              on_attach = function(client, bufnr)
+                -- disable vtsls formatting, let null-ls handle it
+                client.server_capabilities.documentFormattingProvider = false
+                client.server_capabilities.documentRangeFormattingProvider = false
+                -- keep your default keymaps
+                local lsp_zero = require("lsp-zero")
+                lsp_zero.default_keymaps({ buffer = bufnr })
+              end,
             })
+
             require('lspconfig')['ruff_lsp'].setup({
                 init_options = {
                     settings = {
