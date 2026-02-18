@@ -36,9 +36,11 @@ vim.keymap.set("n", "<leader>hf", function() require("harpoon.ui").toggle_quick_
 vim.keymap.set("n", "<leader>ha", function() require("harpoon.mark").add_file() end ) -- [h]arpoon [a]dd
 vim.keymap.set("n", "<leader>hj", function() require("harpoon.ui").nav_next() end ) -- [h]arpoon nav next [vim bindings]
 vim.keymap.set("n", "<leader>hk", function() require("harpoon.ui").nav_prev() end ) -- [h]arpoon nav prev [vim bindings]
+vim.keymap.set({"x", "s"}, "<c-_>", "<plug>Commentary", { noremap = true }) -- comment out line
+vim.keymap.set("n", "<c-_>", "<plug>CommentaryLine", { noremap = true }) -- comment out line
 
--- Debugger
-vim.keymap.set('n', '<F5>', function() require('dap').continue() end)
+-- debugger
+vim.keymap.set('n', '<f5>', function() require('dap').continue() end)
 vim.keymap.set('n', '<F10>', function() require('dap').step_over() end)
 vim.keymap.set('n', '<F11>', function() require('dap').step_into() end)
 vim.keymap.set('n', '<F12>', function() require('dap').step_out() end)
