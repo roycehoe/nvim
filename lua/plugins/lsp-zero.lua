@@ -56,110 +56,68 @@ return {
     },
 
     -- LSP
-    {
-        'neovim/nvim-lspconfig',
-        dependencies = {
-            {'hrsh7th/cmp-nvim-lsp'},
-            {'williamboman/mason-lspconfig.nvim'},
-        },
-        opts = {
-            inlay_hints = { enabled = true },
-        },
-        config = function()
-            -- This is where all the LSP shenanigans will live
-            local lsp_zero = require('lsp-zero')
-            lsp_zero.extend_lspconfig()
-            lsp_zero.on_attach(function(client, bufnr)
-                lsp_zero.default_keymaps({buffer = bufnr})
-            end)
+    config = function()
+        local lsp_zero = require('lsp-zero')
 
-            require('mason-lspconfig').setup({
-                ensure_installed = {'gopls'},
-                handlers = {
-                    lsp_zero.default_setup,
-                }
-            })
-            require('lspconfig')['gopls'].setup({
-                settings = {
-                    gopls = {
-                        usePlaceholders = true,
-                        analyses = {
-                            unusedparams = true,
-                        },
-                    },
-                },
-            })
-            require('lspconfig')['ltex'].setup({
-                settings = {
-                    ltex = {
-                        language = "en-GB",
-                    },
-                },
-            })
-            require('lspconfig')['lua_ls'].setup({
-                settings = {
-                    Lua = {
-                        diagnostics = {
-                            globals = { 'vim' }
-                        }
-                    }
-                },
-            })
-            -- require('lspconfig')['prettier'].setup({
-            --     on_attach = function(client, bufnr)
-            --         -- LSP keymaps and autocmd to fix on save
-            --         lsp_zero.default_keymaps({buffer = bufnr})
-            --         vim.api.nvim_create_autocmd("BufWritePre", {
-            --             buffer = bufnr,
-            --             -- command = "EslintFixAll",
-            --         })
-            --     end,
-            --     settings = {
-            --         codeActionOnSave = {
-            --             enable = true,
-            --             mode = "all",
-            --         },
-            --         format = true,
-            --         run = "onType",
-            --     },
-            -- })
-            -- require('lspconfig')['eslint'].setup({
-            --     on_attach = function(client, bufnr)
-            --         -- LSP keymaps and autocmd to fix on save
-            --         lsp_zero.default_keymaps({buffer = bufnr})
-            --         vim.api.nvim_create_autocmd("BufWritePre", {
-            --             buffer = bufnr,
-            --             command = "EslintFixAll",
-            --         })
-            --     end,
-            --     settings = {
-            --         codeActionOnSave = {
-            --             enable = true,
-            --             mode = "all",
-            --         },
-            --         format = true,
-            --         run = "onType",
-            --     },
-            -- })
+        lsp_zero.on_attach(function(_, bufnr)
+            lsp_zero.default_keymaps({ buffer = bufnr })
+        end)
 
-            require('lspconfig')['vtsls'].setup({
-              on_attach = function(client, bufnr)
-                -- disable vtsls formatting, let null-ls handle it
+        -- Mason: install servers, but don't auto-enable (we'll enable explicitly below).
+        require('mason-lspconfig').setup({
+            ensure_installed = { 'gopls', 'ltex', 'lua_ls', 'vtsls', 'ruff' },
+            automatic_enable = false,
+        })
+
+        -- gopls
+        vim.lsp.config('gopls', {
+            settings = {
+                gopls = {
+                    usePlaceholders = true,
+                    analyses = { unusedparams = true },
+                },
+            },
+        })
+        vim.lsp.enable('gopls')
+
+        -- ltex
+        vim.lsp.config('ltex', {
+            settings = {
+                ltex = { language = "en-GB" },
+            },
+        })
+        vim.lsp.enable('ltex')
+
+        -- lua_ls
+        vim.lsp.config('lua_ls', {
+            settings = {
+                Lua = {
+                    diagnostics = { globals = { 'vim' } },
+                },
+            },
+        })
+        vim.lsp.enable('lua_ls')
+
+        -- vtsls (disable formatting)
+        vim.lsp.config('vtsls', {
+            on_attach = function(client, bufnr)
                 client.server_capabilities.documentFormattingProvider = false
                 client.server_capabilities.documentRangeFormattingProvider = false
-                -- keep your default keymaps
-                local lsp_zero = require("lsp-zero")
                 lsp_zero.default_keymaps({ buffer = bufnr })
-              end,
-            })
+            end,
+        })
+        vim.lsp.enable('vtsls')
 
-            require('lspconfig')['ruff_lsp'].setup({
-                init_options = {
-                    settings = {
-                        args = {},
-                    }
-                }
-            })
-        end
-    },
+        -- ruff (replace ruff_lsp)
+        -- ruff_lsp is deprecated; use ruff (native `ruff server`). :contentReference[oaicite:3]{index=3}
+        vim.lsp.config('ruff', {
+            init_options = {
+                settings = {
+                    args = {},
+                },
+            },
+        })
+        vim.lsp.enable('ruff')
+    end
+
 }

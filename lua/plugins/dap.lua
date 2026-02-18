@@ -11,9 +11,6 @@ return {
 
             require("dap-go").setup()
             require("dapui").setup()
-            require('dap.ext.vscode').load_launchjs()
-
-            -- dap.ext.vscode.load_launchjs()
 
             dap.listeners.before.attach.dapui_config = function()
                 dapui.open()
