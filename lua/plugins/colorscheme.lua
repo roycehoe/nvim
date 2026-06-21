@@ -5,6 +5,7 @@ return {
     priority = 1000,
     config = function()
         -- vim.cmd[[colorscheme nord]]
-         require 'nordic' .load()
+        -- Transparent bg lets tmux dim inactive panes through nvim (see ~/.tmux/.tmux.conf).
+        require 'nordic' .load({ transparent = { bg = true } })
     end
 }
