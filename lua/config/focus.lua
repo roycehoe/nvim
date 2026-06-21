@@ -13,6 +13,8 @@ local FG_UNFOCUSED = "#838994" -- ~50% fade of FG_FOCUSED toward BG, approximati
 local function set_normal(fg)
     vim.api.nvim_set_hl(0, "Normal", { fg = fg, bg = BG })
     vim.api.nvim_set_hl(0, "NormalNC", { fg = fg, bg = BG })
+    -- Keep the always-on sign column gutter matching the buffer background.
+    vim.api.nvim_set_hl(0, "SignColumn", { bg = BG })
 end
 
 local function focused() set_normal(FG_FOCUSED) end
