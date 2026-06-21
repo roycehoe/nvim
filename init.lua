@@ -16,4 +16,5 @@ vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
 require("config.mappings")
 require("config.settings")
+require("config.focus")
 require("lazy").setup("plugins")

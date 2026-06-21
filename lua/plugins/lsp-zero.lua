@@ -138,8 +138,8 @@ return {
       "L3MON4D3/LuaSnip",
       "rafamadriz/friendly-snippets",
       "saadparwaiz1/cmp_luasnip",
-    },
-    config = function()
+  },
+  config = function()
       local lsp_zero = require("lsp-zero")
 
       lsp_zero.on_attach(function(_, bufnr)
@@ -152,6 +152,15 @@ return {
         ensure_installed = { "gopls", "ltex", "lua_ls", "vtsls", "ruff" },
         automatic_installation = true,
       })
+
+      vim.lsp.config("basedpyright", {
+        settings = {
+          basedpyright = {
+            analysis = { typeCheckingMode = "basic" },
+          },
+        },
+      })
+      vim.lsp.enable("basedpyright")
 
       -- gopls
       vim.lsp.config("gopls", {
@@ -201,6 +210,11 @@ return {
         },
       })
       vim.lsp.enable("ruff")
+
+      vim.diagnostic.config({
+          virtual_text = { current_line = true },
+      })
+
 
       -- Optional: format-on-save for Python using Ruff specifically
       local aug = vim.api.nvim_create_augroup("PyFormatRuff", { clear = true })
